@@ -37,8 +37,40 @@
         var line = new THREE.Line(geometry, material);
         //add to scene
         scene.add(line);
-
+        //先渲染出line
         renderer.render(scene, camera);
+
+
+
+        // 创建一个字体加载器
+        var fontLoader = new THREE.FontLoader();
+        // 字体的本质就是一堆类似 SVG 的路径，因此直线占比越高越好。
+        fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+            var textOptions = {
+                font: font,
+                size: 10,
+                height: 4,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 2,
+                bevelSize: 2,
+                bevelSegments: 2
+            }
+
+            // 创建一个法向量材质：其颜色取决于面的法向量的方向
+            var meshMaterial = new THREE.MeshNormalMaterial({
+                flatShading: THREE.FlatShading,
+                transparent: true,
+                opacity: 1
+            })
+            // TextGeometry 的本质就是 ExtrudeGeometry，将二维字体按照指定参数向 Z 轴拉伸
+            var textGeometry = new THREE.TextGeometry('AOTU', textOptions)
+            var textMesh = new THREE.Mesh(textGeometry, meshMaterial)
+            textMesh.position.set(-20, 20, 0)
+            scene.add(textMesh)
+            renderer.render(scene, camera);
+        });
+
     </script>
 </body>
 
